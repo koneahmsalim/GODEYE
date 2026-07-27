@@ -27,6 +27,8 @@ GODEYE/
 
 `search.py` reste un fichier pour le moment ; il pourra devenir un paquet `search/` lors d'une refactorisation ultérieure.
 
+Les caméras sont définies dans `config/cameras.json`. La valeur `source` peut être un index de webcam (`0`), un chemin de fichier vidéo ou l'URL d'un flux RTSP autorisé.
+
 ## Installation
 
 Depuis le dossier `GODEYE` :
@@ -48,7 +50,7 @@ Appuie sur `Échap` pour fermer la fenêtre caméra.
 ## Recherche locale
 
 ```powershell
-python search.py chemin\vers\photo.jpg --top 5
+python search.py chemin\vers\photo.jpg --top 20 --threshold 0.65
 ```
 
 Les résultats affichent le score de similarité, la date, l'identifiant de caméra et le chemin de la capture associée.
@@ -56,5 +58,5 @@ Les résultats affichent le score de similarité, la date, l'identifiant de cam�
 ## Données locales
 
 - La base SQLite est `database/god_eye.db`.
-- Les captures sont créées dans `faces/captures/`.
+- Les captures de visage et leurs frames complets sont créées dans `faces/captures/`.
 - Les modèles et données produites localement ne sont pas inclus dans Git par défaut.

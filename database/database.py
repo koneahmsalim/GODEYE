@@ -36,6 +36,7 @@ def init_db():
                 name TEXT,
                 embedding BLOB NOT NULL,
                 image_path TEXT NOT NULL,
+                frame_path TEXT,
                 timestamp TEXT NOT NULL,
                 camera_id TEXT NOT NULL,
                 track_id TEXT NOT NULL,
@@ -49,6 +50,11 @@ def init_db():
             ON faces(timestamp)
             """
         )
+        columns = {
+            row[1] for row in cursor.execute("PRAGMA table_info(faces)").fetchall()
+        }
+        if "frame_path" not in columns:
+            cursor.execute("ALTER TABLE faces ADD COLUMN frame_path TEXT")
 
 
 def save_passage(name, track_id, score):
@@ -68,7 +74,15 @@ def save_passage(name, track_id, score):
         )
 
 
-def save_face_event(embedding, image_path, camera_id, track_id, confidence, name=None):
+def save_face_event(
+    embedding,
+    image_path,
+    camera_id,
+    track_id,
+    confidence,
+    name=None,
+    frame_path=None,
+):
     """Enregistre un visage détecté, nommé ou non, dans l'index local."""
     vector = np.asarray(embedding, dtype=np.float32).reshape(-1)
     face_id = uuid.uuid4().hex[:12].upper()
@@ -78,16 +92,17 @@ def save_face_event(embedding, image_path, camera_id, track_id, confidence, name
         conn.execute(
             """
             INSERT INTO faces (
-                face_id, name, embedding, image_path, timestamp,
+                face_id, name, embedding, image_path, frame_path, timestamp,
                 camera_id, track_id, confidence
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 face_id,
                 name,
                 vector.tobytes(),
                 str(image_path),
+                str(frame_path) if frame_path else None,
                 timestamp,
                 str(camera_id),
                 str(track_id),
@@ -103,7 +118,7 @@ def get_all_faces():
     with _connect() as conn:
         rows = conn.execute(
             """
-            SELECT face_id, name, embedding, image_path, timestamp,
+            SELECT face_id, name, embedding, image_path, frame_path, timestamp,
                    camera_id, track_id, confidence
             FROM faces
             ORDER BY timestamp DESC
@@ -116,10 +131,11 @@ def get_all_faces():
             "name": row[1],
             "embedding": np.frombuffer(row[2], dtype=np.float32),
             "image_path": row[3],
-            "timestamp": row[4],
-            "camera_id": row[5],
-            "track_id": row[6],
-            "confidence": row[7],
+            "frame_path": row[4],
+            "timestamp": row[5],
+            "camera_id": row[6],
+            "track_id": row[7],
+            "confidence": row[8],
         }
         for row in rows
     ]

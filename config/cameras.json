@@ -1,0 +1,10 @@
+{
+  "cameras": [
+    {
+      "id": "camera_interieure_0",
+      "name": "Caméra intérieure",
+      "source": 0,
+      "enabled": true
+    }
+  ]
+}

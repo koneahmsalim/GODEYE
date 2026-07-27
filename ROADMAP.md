@@ -11,7 +11,7 @@
 - [x] Base SQLite
 - [x] Sauvegarde des embeddings
 - [x] Sauvegarde des images de visage
-- [ ] Capture du contexte complet
+- [x] Capture du contexte complet
 - [ ] Déduplication configurable par similarité et délai
 
 ## Version 0.3 — Recherche par photo
@@ -22,15 +22,15 @@ python search.py image.jpg
 
 - [x] Recherche locale par similarité
 - [x] Retour du score, de la date, de la caméra et de l'image
-- [ ] Top 20 au-dessus d'un seuil configurable
-- [ ] Regroupement chronologique des apparitions
+- [x] Top 20 au-dessus d'un seuil configurable
+- [x] Tri chronologique des apparitions sélectionnées
 
 ## Version 0.4 — Sources vidéo
 
-- [ ] Webcam
+- [x] Webcam
 - [ ] RTSP
 - [ ] Fichiers vidéo
-- [ ] Configuration multi-caméras
+- [x] Configuration multi-caméras
 
 ## Version 0.5 — Interface web
 
