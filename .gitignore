@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+# Données, modèles et captures générés localement
+database/god_eye.db
+faces/captures/
+faces/*.npy
+embeddings/*.npy
+models/*.pt
+
+# Conserver la structure des dossiers vides
+!**/.gitkeep
